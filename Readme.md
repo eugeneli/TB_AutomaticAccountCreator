@@ -1,7 +1,7 @@
 Automatic Runescape Fresh Account Maker
 ========================
     
-Automatically creates Runescape accounts, saves them to TopBot's account manager, launches and logs
+Automatically creates Runescape accounts, saves them to TopBot's account manager, launches and logs them in, and starts the free Tutorial Island script. Voila. Fresh accounts ready to go!
 
 **Sample Usage:**
 ```
