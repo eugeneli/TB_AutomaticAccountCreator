@@ -128,14 +128,15 @@ public class AccountManager
     {
         try
         {
-            Files.delete(Paths.get(ACCOUNT_BACKUP_FILENAME));
+            Files.deleteIfExists(Paths.get(ACCOUNT_BACKUP_FILENAME));
             FileWriter fw = new FileWriter(ACCOUNT_BACKUP_FILENAME, true);
             fw.write("\r\n"); //New line to separate between batches of bots
             for(Account acct : TEnvironment.getAccounts())
                 fw.write(acct.getUsername() + ":" + acct.getPassword() + "\r\n");
 
             fw.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println("Accounts backup failed");
             e.printStackTrace();
         }

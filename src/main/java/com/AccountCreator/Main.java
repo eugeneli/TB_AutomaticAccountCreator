@@ -2,6 +2,7 @@ package com.AccountCreator;
 
 import com.AccountCreator.model.RSAccount;
 import com.AccountCreator.util.AccountManager;
+import com.AccountCreator.util.WorldManager;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class Main
     private static String botPassword;
     private static int numAccounts;
 
+    private static WorldManager worlds = new WorldManager();
     private static ArrayList<RSAccount> accounts = new ArrayList<>();
 
     public static void main(String[] args)
@@ -47,12 +49,17 @@ public class Main
 
     public static void launchTopbot(RSAccount acct, String tbUsername, String tbPassword)
     {
-        Process p;
         try
         {
             //ID: 399 is the tutorial script. Add it to account if you don't have it.
-            String cmdString = "java -jar topbotclient.jar -s 399 -a " + acct.email + " -n " + tbUsername + " -pw " + tbPassword;
-            p = Runtime.getRuntime().exec(cmdString);
+            String cmdString = "java -jar topbotclient.jar -s 399 -a %acct% -n %tbn% -pw %tbp% -w %w%";
+
+            cmdString = cmdString.replaceAll("%acct%", acct.email)
+                                .replaceAll("%tbn%", tbUsername)
+                                .replaceAll("%tbp%", tbPassword)
+                                .replaceAll("%w%", worlds.getRandomWorld());
+
+            Runtime.getRuntime().exec(cmdString);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,7 +85,12 @@ public class Main
             }
 
             if(cmd.hasOption("n"))
+            {
                 numAccounts = Integer.parseInt(cmd.getOptionValue("n"));
+
+                if(numAccounts >= 9)
+                    System.out.println("WARNING: The number of accounts exceeds the number of f2p worlds!");
+            }
             else
                 numAccounts = DEFAULT_ACCOUNT_NUM;
 
