@@ -1,4 +1,4 @@
-package com.AccountCreator;
+package com.AccountCreator.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

@@ -1,5 +1,6 @@
-package com.AccountCreator;
+package com.AccountCreator.util;
 
+import com.AccountCreator.model.RSAccount;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -16,19 +17,25 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class AccountCreator
+public class AccountManager
 {
-    private static final String CREATION_URL = "https://secure.runescape.com/m=account-creation/g=oldscape/create_account_funnel.ws";
-    private static final int MAX_NAME_LENGTH = 12;
-
     private static WordDictionary dict = new WordDictionary();
     private static Random rand = new Random();
-    private static List<String> emailDomains = new ArrayList<>(Arrays.asList("@spambooger.com", "@devnullmail.com", "@aol.com", "@vk.com", "@yahoo.com", "@live.com", "@facebook.com"));
+
+    private static final String CREATION_URL = "https://secure.runescape.com/m=account-creation/g=oldscape/create_account_funnel.ws";
+    private static final String ACCOUNT_BACKUP_FILENAME = "TopbotAccountBackup.txt";
+    private static final int MIN_NAME_LENGTH = 3;
+    private static final int MAX_NAME_LENGTH = 12;
+    private static final double CHANCE_REPLACE_LETTER = 0.20;
+    private static final double CHANCE_APPEND_NUMBER = 0.20;
+    private static final double CHANCE_CAP_FIRST_LETTER = 0.50;
+    private static final List<String> emailDomains = new ArrayList<>(Arrays.asList("@spambooger.com", "@devnullmail.com", "@aol.com", "@vk.com",
+                                                                                    "@yahoo.com", "@live.com", "@facebook.com"));
 
     private static String genRandName()
     {
         //Select a random length and random word.
-        String word = dict.getRandWord(3 + rand.nextInt(MAX_NAME_LENGTH - 3));
+        String word = dict.getRandWord(MIN_NAME_LENGTH + rand.nextInt(MAX_NAME_LENGTH - MIN_NAME_LENGTH));
 
         //If word is too short, keep adding random words to it
         while(word.length() < MAX_NAME_LENGTH)
@@ -44,7 +51,7 @@ public class AccountCreator
         {
             if(map.containsKey(""+c))
             {
-                if(rand.nextDouble() < 0.20)
+                if(rand.nextDouble() < CHANCE_REPLACE_LETTER)
                     finalWord += map.get(""+c);
             }
             else
@@ -52,11 +59,11 @@ public class AccountCreator
         }
 
         //Random chance of appending number to end of name
-        if(finalWord.length() < MAX_NAME_LENGTH && rand.nextDouble() < 0.20)
+        if(finalWord.length() < MAX_NAME_LENGTH && rand.nextDouble() < CHANCE_APPEND_NUMBER)
             finalWord += ""+ rand.nextInt(10);
 
-        //50% chance of capitalizing first letter
-        return rand.nextBoolean() ? WordUtils.capitalize(finalWord) : finalWord;
+        //Random chance of capitalizing first letter
+        return rand.nextDouble() < CHANCE_CAP_FIRST_LETTER ? WordUtils.capitalize(finalWord) : finalWord;
     }
 
     public static RSAccount createAccount(String password)
@@ -121,10 +128,11 @@ public class AccountCreator
     {
         try
         {
-            FileWriter fw = new FileWriter("out.txt", true);
+            Files.delete(Paths.get(ACCOUNT_BACKUP_FILENAME));
+            FileWriter fw = new FileWriter(ACCOUNT_BACKUP_FILENAME, true);
             fw.write("\r\n"); //New line to separate between batches of bots
             for(Account acct : TEnvironment.getAccounts())
-                fw.write(acct.getUsername() + ":" + acct.getPassword());
+                fw.write(acct.getUsername() + ":" + acct.getPassword() + "\r\n");
 
             fw.close();
         } catch (IOException e) {

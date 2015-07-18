@@ -1,4 +1,4 @@
-package com.AccountCreator;
+package com.AccountCreator.model;
 
 public class RSAccount
 {

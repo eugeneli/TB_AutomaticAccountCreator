@@ -1,5 +1,7 @@
 package com.AccountCreator;
 
+import com.AccountCreator.model.RSAccount;
+import com.AccountCreator.util.AccountManager;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
@@ -28,14 +30,14 @@ public class Main
         if(parseArgs(args))
         {
             //Backup existing accounts in topbot
-            AccountCreator.backupAccounts();
+            AccountManager.backupAccounts();
 
             //Create accounts
             for(int i = 0; i < numAccounts; i++)
-                accounts.add(AccountCreator.createAccount(botPassword));
+                accounts.add(AccountManager.createAccount(botPassword));
 
             //Add new accounts to topbot
-            AccountCreator.saveAccounts(accounts);
+            AccountManager.saveAccounts(accounts);
 
             //Launch Topbot for each account and start tutorial script
             for(RSAccount acct : accounts)
