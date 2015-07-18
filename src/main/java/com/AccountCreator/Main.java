@@ -80,7 +80,7 @@ public class Main
             }
             else
             {
-                System.out.println("Please enter your Topbot usernamd and password");
+                System.out.println("Please enter your Topbot username and password");
                 return false;
             }
 
