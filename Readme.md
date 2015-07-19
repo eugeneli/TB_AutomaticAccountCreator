@@ -13,3 +13,5 @@ java -jar AccountCreator.jar -tbn TopBotUsername -tbp TopBotPassword -n 2 -bp Ne
 - tbp - Your TopBot password
 - n - Number of new accounts to be made (Optional. Default: 3)
 - bp - Password of new accounts (Optional. Default: 'asdasd123')
+- s - Script ID/name to run after logging in (Default: 339)
+

@@ -146,7 +146,7 @@ public class AccountManager
     public static void deleteAllAccounts()
     {
         try {
-            Files.delete(Paths.get("data.dat"));
+            Files.deleteIfExists(Paths.get("data.dat"));
         }
         catch (NoSuchFileException e) {
             System.out.println("Couldn't find data.dat. Is it in the same directory?");
