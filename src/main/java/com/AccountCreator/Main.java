@@ -12,7 +12,7 @@ public class Main
 {
     private static final String DEFAULT_PW = "asdasd123";
     private static final int DEFAULT_ACCOUNT_NUM = 3;
-    private static final String DEFAULT_SCRIPT = "339";
+    private static final String DEFAULT_SCRIPT = "399";
 
     private static Options options = new Options();
     private static String tbUsername;
